@@ -17,7 +17,6 @@ package org.springframework.samples.petclinic.owner
 
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
-import org.springframework.util.StringUtils
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
@@ -57,8 +56,8 @@ internal class PetController(private val pets: PetRepository, private val owners
 
     @PostMapping("/pets/new")
     fun processCreationForm(owner: Owner, @Valid pet: Pet, result: BindingResult, model: ModelMap): String {
-        if (StringUtils.hasLength(pet.name) && pet.isNew && owner.getPet(pet.name, true) != null) {
-            result.rejectValue("name", "duplicate", "already exists")
+        if (pet.name.isNotEmpty() && pet.isNew) {
+            owner.getPet(pet.name, true)?.let { result.rejectValue("name", "duplicate", "already exists") }
         }
         owner.addPet(pet)
         return if (result.hasErrors()) {
@@ -72,8 +71,7 @@ internal class PetController(private val pets: PetRepository, private val owners
 
     @GetMapping("/pets/{petId}/edit")
     fun initUpdateForm(@PathVariable("petId") petId: Int, model: ModelMap): String {
-        val pet = this.pets.findById(petId)
-        model["pet"] = pet
+        model["pet"] = this.pets.findById(petId)
         return VIEWS_PETS_CREATE_OR_UPDATE_FORM
     }
 
@@ -93,6 +91,6 @@ internal class PetController(private val pets: PetRepository, private val owners
 
     companion object {
 
-        private val VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm"
+        private const val VIEWS_PETS_CREATE_OR_UPDATE_FORM = "pets/createOrUpdatePetForm"
     }
 }
