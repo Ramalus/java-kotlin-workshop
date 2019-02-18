@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.samples.petclinic.service;
-
-import java.util.Collection;
 
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.BaseEntity;
+
+import java.util.Collection;
 
 /**
  * Utility methods for handling entities. Separate from the BaseEntity class mainly because of dependency on the
@@ -50,5 +49,4 @@ public abstract class EntityUtils {
         }
         throw new ObjectRetrievalFailureException(entityClass, entityId);
     }
-
 }

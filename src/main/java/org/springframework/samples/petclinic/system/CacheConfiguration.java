@@ -32,5 +32,4 @@ class CacheConfiguration {
     private javax.cache.configuration.Configuration<Object, Object> cacheConfiguration() {
         return new MutableConfiguration<>().setStatisticsEnabled(true);
     }
-
 }
