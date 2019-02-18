@@ -89,8 +89,8 @@ public class ClinicServiceTests {
         Owner owner = this.owners.findById(1);
         assertThat(owner.getLastName()).startsWith("Franklin");
         assertThat(owner.getPets().size()).isEqualTo(1);
-        assertThat(owner.getPets().get(0).getType()).isNotNull();
-        assertThat(owner.getPets().get(0).getType().getName()).isEqualTo("cat");
+        assertThat(owner.getSortedPets().get(0).getType()).isNotNull();
+        assertThat(owner.getSortedPets().get(0).getType().getName()).isEqualTo("cat");
     }
 
     @Test
