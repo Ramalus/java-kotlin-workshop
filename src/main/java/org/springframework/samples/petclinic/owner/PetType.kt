@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.owner;
+package org.springframework.samples.petclinic.owner
 
-import org.springframework.samples.petclinic.model.NamedEntity;
+import org.springframework.samples.petclinic.model.NamedEntity
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.Entity
+import javax.persistence.Table
 
 /**
  * @author Juergen Hoeller
@@ -26,6 +26,4 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "types")
-public class PetType extends NamedEntity {
-
-}
+open class PetType : NamedEntity()
