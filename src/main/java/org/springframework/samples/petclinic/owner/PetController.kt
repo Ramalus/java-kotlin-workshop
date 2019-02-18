@@ -20,13 +20,7 @@ import org.springframework.ui.ModelMap
 import org.springframework.util.StringUtils
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.InitBinder
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 /**
@@ -39,19 +33,13 @@ import javax.validation.Valid
 internal class PetController(private val pets: PetRepository, private val owners: OwnerRepository) {
 
     @ModelAttribute("types")
-    fun populatePetTypes(): Collection<PetType> {
-        return this.pets.findPetTypes()
-    }
+    fun populatePetTypes(): Collection<PetType> = this.pets.findPetTypes()
 
     @ModelAttribute("owner")
-    fun findOwner(@PathVariable("ownerId") ownerId: Int): Owner {
-        return this.owners.findById(ownerId)
-    }
+    fun findOwner(@PathVariable("ownerId") ownerId: Int): Owner = this.owners.findById(ownerId)
 
     @InitBinder("owner")
-    fun initOwnerBinder(dataBinder: WebDataBinder) {
-        dataBinder.setDisallowedFields("id")
-    }
+    fun initOwnerBinder(dataBinder: WebDataBinder) = dataBinder.setDisallowedFields("id")
 
     @InitBinder("pet")
     fun initPetBinder(dataBinder: WebDataBinder) {
@@ -89,15 +77,16 @@ internal class PetController(private val pets: PetRepository, private val owners
     }
 
     @PostMapping("/pets/{petId}/edit")
-    fun processUpdateForm(@Valid pet: Pet, result: BindingResult, owner: Owner, model: ModelMap): String {
-        if (result.hasErrors()) {
+    fun processUpdateForm(@Valid pet: Pet, result: BindingResult, owner: Owner, model: ModelMap): String = when {
+        result.hasErrors() -> {
             pet.owner = owner
             model["pet"] = pet
-            return VIEWS_PETS_CREATE_OR_UPDATE_FORM
-        } else {
+            VIEWS_PETS_CREATE_OR_UPDATE_FORM
+        }
+        else -> {
             owner.addPet(pet)
             this.pets.save(pet)
-            return "redirect:/owners/{ownerId}"
+            "redirect:/owners/{ownerId}"
         }
     }
 
