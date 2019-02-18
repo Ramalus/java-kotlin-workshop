@@ -48,9 +48,10 @@ internal class PetController(private val pets: PetRepository, private val owners
 
     @GetMapping("/pets/new")
     fun initCreationForm(owner: Owner, model: ModelMap): String {
-        val pet = Pet()
-        owner.addPet(pet)
-        model["pet"] = pet
+        with(Pet()) {
+            owner.addPet(this)
+            model["pet"] = this
+        }
         return VIEWS_PETS_CREATE_OR_UPDATE_FORM
     }
 
@@ -60,12 +61,12 @@ internal class PetController(private val pets: PetRepository, private val owners
             result.rejectValue("name", "duplicate", "already exists")
         }
         owner.addPet(pet)
-        if (result.hasErrors()) {
+        return if (result.hasErrors()) {
             model["pet"] = pet
-            return VIEWS_PETS_CREATE_OR_UPDATE_FORM
+            VIEWS_PETS_CREATE_OR_UPDATE_FORM
         } else {
             this.pets.save(pet)
-            return "redirect:/owners/{ownerId}"
+            "redirect:/owners/{ownerId}"
         }
     }
 
