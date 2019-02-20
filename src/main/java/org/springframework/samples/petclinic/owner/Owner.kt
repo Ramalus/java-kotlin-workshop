@@ -20,6 +20,7 @@ import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Digits
 import javax.validation.constraints.NotEmpty
+import kotlin.collections.HashSet
 
 /**
  * Simple JavaBean domain object representing an owner.
@@ -49,7 +50,7 @@ class Owner : Person() {
     val pets: MutableSet<Pet> = HashSet()
 
     val sortedPets: List<Pet>
-        get() = pets.sortedWith(compareBy { it.name })
+        get() = pets.sortedBy { it.name }
 
     fun addPet(pet: Pet) {
         if (pet.isNew) pets.add(pet)
