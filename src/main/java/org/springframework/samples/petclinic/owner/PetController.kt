@@ -29,7 +29,7 @@ import javax.validation.Valid
  */
 @Controller
 @RequestMapping("/owners/{ownerId}")
-internal class PetController(private val pets: PetRepository, private val owners: OwnerRepository) {
+class PetController(private val pets: PetRepository, private val owners: OwnerRepository) {
 
     @ModelAttribute("types")
     fun populatePetTypes(): Collection<PetType> = this.pets.findPetTypes()
