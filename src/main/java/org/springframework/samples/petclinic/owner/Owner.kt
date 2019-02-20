@@ -65,7 +65,7 @@ class Owner : Person() {
     fun getPet(name: String, ignoreNew: Boolean = false): Pet? {
         with(name.toLowerCase()) {
             return pets.filterNot { ignoreNew && it.isNew }
-                .find { it.name.toLowerCase() == this }
+                    .find { it.name.toLowerCase() == this }
         }
     }
 }
