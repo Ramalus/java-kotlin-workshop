@@ -37,25 +37,20 @@ import javax.validation.Valid
 internal class OwnerController(private val owners: OwnerRepository) {
 
     @InitBinder
-    fun setAllowedFields(dataBinder: WebDataBinder) {
-        dataBinder.setDisallowedFields("id")
-    }
+    fun setAllowedFields(dataBinder: WebDataBinder) = dataBinder.setDisallowedFields("id")
 
     @GetMapping("/owners/new")
     fun initCreationForm(model: MutableMap<String, Any>): String {
-        val owner = Owner()
-        model["owner"] = owner
+        model["owner"] = Owner()
         return VIEWS_OWNER_CREATE_OR_UPDATE_FORM
     }
 
     @PostMapping("/owners/new")
-    fun processCreationForm(@Valid owner: Owner, result: BindingResult): String {
-        if (result.hasErrors()) {
-            return VIEWS_OWNER_CREATE_OR_UPDATE_FORM
-        } else {
-            this.owners.save(owner)
-            return "redirect:/owners/" + owner.id!!
-        }
+    fun processCreationForm(@Valid owner: Owner, result: BindingResult): String = if (result.hasErrors()) {
+        VIEWS_OWNER_CREATE_OR_UPDATE_FORM
+    } else {
+        this.owners.save(owner)
+        "redirect:/owners/" + owner.id!!
     }
 
     @GetMapping("/owners/find")
@@ -96,21 +91,20 @@ internal class OwnerController(private val owners: OwnerRepository) {
 
     @GetMapping("/owners/{ownerId}/edit")
     fun initUpdateOwnerForm(@PathVariable("ownerId") ownerId: Int, model: Model): String {
-        val owner = this.owners.findById(ownerId)
-        model.addAttribute(owner)
+        with(model) {
+            addAttribute(owners.findById(ownerId))
+        }
         return VIEWS_OWNER_CREATE_OR_UPDATE_FORM
     }
 
     @PostMapping("/owners/{ownerId}/edit")
-    fun processUpdateOwnerForm(@Valid owner: Owner, result: BindingResult, @PathVariable("ownerId") ownerId: Int): String {
-        return if (result.hasErrors()) {
+    fun processUpdateOwnerForm(@Valid owner: Owner, result: BindingResult, @PathVariable("ownerId") ownerId: Int): String =
+        if (result.hasErrors()) {
             VIEWS_OWNER_CREATE_OR_UPDATE_FORM
         } else {
-            owner.id = ownerId
-            this.owners.save(owner)
+            this.owners.save(owner.apply { id = ownerId })
             "redirect:/owners/{ownerId}"
         }
-    }
 
     /**
      * Custom handler for displaying an owner.
@@ -119,14 +113,11 @@ internal class OwnerController(private val owners: OwnerRepository) {
      * @return a ModelMap with the model attributes for the view
      */
     @GetMapping("/owners/{ownerId}")
-    fun showOwner(@PathVariable("ownerId") ownerId: Int): ModelAndView {
-        val mav = ModelAndView("owners/ownerDetails")
-        mav.addObject(this.owners.findById(ownerId))
-        return mav
-    }
+    fun showOwner(@PathVariable("ownerId") ownerId: Int): ModelAndView =
+        ModelAndView("owners/ownerDetails").apply { addObject(owners.findById(ownerId)) }
 
     companion object {
 
-        private val VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm"
+        private const val VIEWS_OWNER_CREATE_OR_UPDATE_FORM = "owners/createOrUpdateOwnerForm"
     }
 }
