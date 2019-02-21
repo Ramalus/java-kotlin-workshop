@@ -13,50 +13,51 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.owner;
+package org.springframework.samples.petclinic.owner
 
-import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+import org.springframework.validation.Errors
+import org.springframework.validation.Validator
 
 /**
- * <code>Validator</code> for <code>Pet</code> forms.
- * <p>
+ * `Validator` for `Pet` forms.
+ *
+ *
  * We're not using Bean Validation annotations here because it is easier to define such validation rule in Java.
- * </p>
+ *
  *
  * @author Ken Krebs
  * @author Juergen Hoeller
  */
-public class PetValidator implements Validator {
+class PetValidator : Validator {
 
-    private static final String REQUIRED = "required";
-
-    @Override
-    public void validate(Object obj, Errors errors) {
-        Pet pet = (Pet) obj;
-        String name = pet.getName();
+    override fun validate(obj: Any, errors: Errors) {
+        val pet = obj as Pet
+        val name = pet.name
         // name validation
-        if (!StringUtils.hasLength(name)) {
-            errors.rejectValue("name", REQUIRED, REQUIRED);
+        if (name.isNotEmpty()) {
+            errors.rejectValue("name", REQUIRED, REQUIRED)
         }
 
         // type validation
-        if (pet.isNew() && pet.getType() == null) {
-            errors.rejectValue("type", REQUIRED, REQUIRED);
+        if (pet.isNew && pet.type == null) {
+            errors.rejectValue("type", REQUIRED, REQUIRED)
         }
 
         // birth date validation
-        if (pet.getBirthDate() == null) {
-            errors.rejectValue("birthDate", REQUIRED, REQUIRED);
+        if (pet.birthDate == null) {
+            errors.rejectValue("birthDate", REQUIRED, REQUIRED)
         }
     }
 
     /**
      * This Validator validates *just* Pet instances
      */
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return Pet.class.isAssignableFrom(clazz);
+    override fun supports(clazz: Class<*>): Boolean {
+        return Pet::class.java.isAssignableFrom(clazz)
+    }
+
+    companion object {
+
+        private const val REQUIRED = "required"
     }
 }
