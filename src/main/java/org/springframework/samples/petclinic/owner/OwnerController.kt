@@ -50,7 +50,7 @@ internal class OwnerController(private val owners: OwnerRepository) {
         VIEWS_OWNER_CREATE_OR_UPDATE_FORM
     } else {
         this.owners.save(owner)
-        "redirect:/owners/" + owner.id!!
+        "redirect:/owners/" + owner.id
     }
 
     @GetMapping("/owners/find")
@@ -79,7 +79,7 @@ internal class OwnerController(private val owners: OwnerRepository) {
             results.size == 1 -> {
                 // 1 owner found
                 owner = results.iterator().next()
-                "redirect:/owners/" + owner.id!!
+                "redirect:/owners/${owner.id}"
             }
             else -> {
                 // multiple owners found
@@ -98,13 +98,14 @@ internal class OwnerController(private val owners: OwnerRepository) {
     }
 
     @PostMapping("/owners/{ownerId}/edit")
-    fun processUpdateOwnerForm(@Valid owner: Owner, result: BindingResult, @PathVariable("ownerId") ownerId: Int): String =
-        if (result.hasErrors()) {
+    fun processUpdateOwnerForm(@Valid owner: Owner, result: BindingResult, @PathVariable("ownerId") ownerId: Int): String {
+        return if (result.hasErrors()) {
             VIEWS_OWNER_CREATE_OR_UPDATE_FORM
         } else {
             this.owners.save(owner.apply { id = ownerId })
             "redirect:/owners/{ownerId}"
         }
+    }
 
     /**
      * Custom handler for displaying an owner.
@@ -114,7 +115,7 @@ internal class OwnerController(private val owners: OwnerRepository) {
      */
     @GetMapping("/owners/{ownerId}")
     fun showOwner(@PathVariable("ownerId") ownerId: Int): ModelAndView =
-        ModelAndView("owners/ownerDetails").apply { addObject(owners.findById(ownerId)) }
+            ModelAndView("owners/ownerDetails").apply { addObject(owners.findById(ownerId)) }
 
     companion object {
 

@@ -32,7 +32,6 @@ import javax.persistence.*
 @Entity
 @Table(name = "pets")
 class Pet : NamedEntity() {
-
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     var birthDate: LocalDate? = null

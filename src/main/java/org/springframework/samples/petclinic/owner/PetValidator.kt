@@ -34,7 +34,7 @@ class PetValidator : Validator {
         val pet = obj as Pet
         val name = pet.name
         // name validation
-        if (name.isNotEmpty()) {
+        if (name.isEmpty()) {
             errors.rejectValue("name", REQUIRED, REQUIRED)
         }
 
