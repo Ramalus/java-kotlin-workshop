@@ -1,6 +1,6 @@
-# === Supercharge your Java with Kotlin - DevFest Winnipeg 2019 Workshop ===
+# Supercharge your Java with Kotlin - DevFest Winnipeg 2019 Workshop
 
-==== The readme below this point is the same as the official Spring PetClinic Sample Application ====
+= The readme below this point is the same as the official Spring PetClinic Sample Application =
 
 ## Spring PetClinic Sample Application [![Build Status](https://travis-ci.org/spring-projects/spring-petclinic.png?branch=master)](https://travis-ci.org/spring-projects/spring-petclinic/)
 
