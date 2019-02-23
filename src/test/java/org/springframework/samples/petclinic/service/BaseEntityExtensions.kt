@@ -17,17 +17,6 @@ package org.springframework.samples.petclinic.service
 
 import org.springframework.samples.petclinic.model.BaseEntity
 
-/**
- * Utility methods for handling entities. Separate from the BaseEntity class mainly because of dependency on the
- * ORM-associated ObjectRetrievalFailureException.
- *
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @see org.springframework.samples.petclinic.model.BaseEntity
- *
- * @since 29.10.2003
- */
-
 inline fun <reified T : BaseEntity> Collection<T>.getById(id: Int): T {
     return this.first { it.id == id && T::class.java.isInstance(it) }
 }
